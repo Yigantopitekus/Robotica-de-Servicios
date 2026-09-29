@@ -14,7 +14,7 @@ Que se traduce en:
 <img width="313" height="84" alt="image" src="https://github.com/user-attachments/assets/5ad87759-9b5e-4fa5-8da7-eff1ddde9ff4" />
 
 
-Con estos datos ya se puede relacionar la posición en píxeles 2D a las coordenadas xy del robot resolviendo el sistema de ecuaciones.
+Con estos datos ya se puede hacer el registro relacionar la posición en píxeles 2D a las coordenadas xy del robot resolviendo el sistema de ecuaciones.
 
 # Creación de las casillas del mapa
 Primero, el mapa se tiene que dividir en obstáculo (físico o virtual) y espacio navegable, que se representan como negro y blanco respectivamente. 
