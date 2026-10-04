@@ -68,9 +68,7 @@ La versión final es: Un control proporcional donde primero se oriente hacia el 
 Respecto al mapa, se va a notar en las muestras cómo es diferente la erosión del planning mostrado anteriormente respecto al video de movimiento, esto se debe a que hice una modificación en la función de erosión para reducir el impacto del desfase, haciéndola más restrictiva. Primero aplico una traslación al mapa para tratar de alinearlo con el simulador, y luego sigo el mismo procedimiento que se comenta antes, el resultado es que se reducen las casillas visitables por ejemplo, la parte norte de la mesa.
 
 <img width="1212" height="577" alt="Screenshot from 2026-10-04 13-10-22" src="https://github.com/user-attachments/assets/627365ec-c540-4be8-8bc7-f09b8ca7a35a" />
-<video width="1212" height="577" controls>
-  <source src="./cleaning_video.webm" type="video/webm">
-</video>
+[ejemplo_final.webm](https://github.com/user-attachments/assets/7d01d3ed-b0df-436e-bf85-d4d2db292adf)
 
 # Futuras posibles implementaciones
 El trabajo aunque completo, se puede mejorar. Algunas de las funcionalidades  como las que se han comentado han quedado descartadas por preferir un proyecto funcional a uno optimo (pero no funcional del todo), con mas tiempo me hubiera gustado terminar de perfeccionar elementos como el control mediante PID, optimizacion del camino, una erosion menos tosca o recuperacion con el bumper mejor implementada para no desviarse mucho de la trayectoria. EL proyecto esta completo pero tiene algunas limitaciones; debido a la erosion muchas partes de la casa del simulador se quedan sin limpiar aunque en el planificador se den como limpiadas, por otro lado el robot sufre mucho en espacios cerrados debido al hitbox del bumper que aunque parece que no choca se activa, ademas el movimiento en linea recta esta muy limitado al ir casilla por casilla, pero se decidio dejar asi para evitar las colisiones que generaban los "atajos".
