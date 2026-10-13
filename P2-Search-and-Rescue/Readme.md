@@ -1,6 +1,6 @@
 
 # Dron en un Search and Rescue (SAR)
-En esta practica el objetivo es programar un dron para hacer un reconocimiento en una zona donde se cree que hay personas naufriagadas. El dron debe acercarse a una zona señalada, iniciar un patrullaje y reconocer caras usando un detector de caras de OpenCV,
+En esta practica el objetivo es programar un dron para hacer un reconocimiento en una zona donde se cree que hay personas naufriagadas. El dron debe acercarse a una zona señalada, iniciar un patrullaje y reconocer caras usando un detector de caras de OpenCV, guardar la ubicacion de los supervivientes, evitando guardarlos multiples veces y mantener un control de la bateria.
 ## Traduccion de coordenadas
 Lo primero de todo es traducir las coordenadas globales proporcionadaas a unos valores mas manejables. En este caso usamos un traductor online para pasar de GPS a UTM (Northing,y Westing). Sin embargo estas coordenadas son globales, y no son aplicables directamente en nuestro dron, para obtener las coordenadas locales de la zona de rescate debemos restar las coordenadas globales del origen a las globales de la zona de rescate. Lo que nos quedan unas coordenadas con el barco como origen.
 ## Movimiento
