@@ -1,3 +1,4 @@
+
 # Dron en un Search and Rescue (SAR)
 En esta practica el objetivo es programar un dron para hacer un reconocimiento en una zona donde se cree que hay personas naufriagadas. El dron debe acercarse a una zona señalada, iniciar un patrullaje y reconocer caras usando un detector de caras de OpenCV,
 ## Traduccion de coordenadas
@@ -10,6 +11,8 @@ La primera fase del trabajo ha sido el iniciar el movimiento hacia la zona. Para
 Respecto al patrullaje, en un principio se quedo como un cuadrado con lados de un tamaño indicado, por simplicidad y para poder trabajar en el detector de caras. Pero según avanzo la practica, se cambió por otro mas adecuado. En un principio trate de usar una espiral medianamente circular, pero resulto muy compleja para como habia diseñado el movimiento del robot, asique preferí optar por una espiral cuadrada, donde dada una longitud maxima de lado, un centro y un valor de crecimiento, desde el centro indicado va formando una espiral que crece en cada vuelta como el valor de crecimiento hasta llegar a un trazo mayor que el maximo. Como en un escenario real, no se sabe donde estan las victimas exactamente, por lo que la mayoria de el patrullaje es sobre agua vacia.
 
 Todo el movimiento usa la misma funcion _go_to_point_ para usar el mismo control para x,y y z, asi como indicar si se esta patrullando, moviendo hacia la zona o volviendo a cargar la batería. Esto sirve para no estar usando todo el rato el detector de caras, y para regular la velocidad maxima, ya que en la zona de patrullaje deberia ser un movimiento ma slento para buscar a las parsonas.
+
+[Screencast from 2026-10-13 19-33-30.webm](https://github.com/user-attachments/assets/055b894e-d768-4f70-a541-aa31fd4ea4b4)
 
 ## Reconocimiento de Caras
 Para reconocer las caras de las victimas usamos el detector face cascade detector de OpenCV, donde usamos una funcion DetectAndDisplay que viene en el codigo de ejemplo. Para que funcione correctamente hay que girar las imágenes varias veces ya que solo detectas caras rectas. A esta funcion solo se le pasa la imagen ventral del dron, ya que la imagen frontal no nos sirve en este caso. Tambien se puede usar para depurar, para ver como funciona la deteccion, y que partes detecta. En OpenCv tambien existe un EyesDetector pero no es necesario su uso, aunque se podria usar para evitar falsos positivos.
