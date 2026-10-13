@@ -10,7 +10,7 @@ La primera fase del trabajo ha sido el iniciar el movimiento hacia la zona. Para
 
 Respecto al patrullaje, en un principio se quedo como un cuadrado con lados de un tamaño indicado, por simplicidad y para poder trabajar en el detector de caras. Pero según avanzo la practica, se cambió por otro mas adecuado. En un principio trate de usar una espiral medianamente circular, pero resulto muy compleja para como habia diseñado el movimiento del robot, asique preferí optar por una espiral cuadrada, donde dada una longitud maxima de lado, un centro y un valor de crecimiento, desde el centro indicado va formando una espiral que crece en cada vuelta como el valor de crecimiento hasta llegar a un trazo mayor que el maximo. Como en un escenario real, no se sabe donde estan las victimas exactamente, por lo que la mayoria de el patrullaje es sobre agua vacia.
 
-Todo el movimiento usa la misma funcion _go_to_point_ para usar el mismo control para x,y y z, asi como indicar si se esta patrullando, moviendo hacia la zona o volviendo a cargar la batería. Esto sirve para no estar usando todo el rato el detector de caras, y para regular la velocidad maxima, ya que en la zona de patrullaje deberia ser un movimiento ma slento para buscar a las parsonas.
+Todo el movimiento usa la misma funcion _go_to_point_ para usar el mismo control para x,y y z, asi como indicar si se esta patrullando, moviendo hacia la zona o volviendo a cargar la batería. Esto sirve para no estar usando todo el rato el detector de caras, y para regular la velocidad maxima, ya que en la zona de patrullaje deberia ser un movimiento mas lento para buscar a las personas.
 
 [Screencast from 2026-10-13 19-33-30.webm](https://github.com/user-attachments/assets/055b894e-d768-4f70-a541-aa31fd4ea4b4)
 
