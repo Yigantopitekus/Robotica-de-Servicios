@@ -21,5 +21,7 @@ Un problema que surge durante este proceso es la duplicacion de detecciones, ya 
 
 ## Bateria
 Para simular la bateria se sa una variable que comienza en 100, y baja en 10 puntos cada vez que llega a un destino, caundo ocurre eso vuelve a baja velocidad ( porque de otra manera era dificil acertar el aterrizaje en el barco y se caía al agua ), aterriza, recarga al 100% otra vez y vuelve a tomar la ruta desde donde lo dejo. Aqui hay un ejemplo con el gasto de la bateria exagerado para que no sea muy largo:
-[Screencast from 2026-10-13 21-34-55.webm]
-[battery](https://github.com/user-attachments/assets/947e57cb-977a-4952-a0bb-896410c6a23e)
+
+[Screencast from 2026-10-13 21-34-55.webm](https://github.com/user-attachments/assets/947e57cb-977a-4952-a0bb-896410c6a23e)
+
+
