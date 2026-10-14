@@ -20,8 +20,15 @@ Para reconocer las caras de las victimas usamos el detector face cascade detecto
 Un problema que surge durante este proceso es la duplicacion de detecciones, ya que la deteccion de victimas se guarda segun la posición del dron, y no la de la victima, para amenizar este problema, según se guardan las posiciones de los naufragos, se comprueba que no se haya guardado una posicion en un radio de 4 metros. Si no se hiciese esto, cada vez que aparece un naufrago se reportarian cientos de ellos.
 
 ## Bateria
-Para simular la bateria se sa una variable que comienza en 100, y baja en 10 puntos cada vez que llega a un destino, caundo ocurre eso vuelve a baja velocidad ( porque de otra manera era dificil acertar el aterrizaje en el barco y se caía al agua ), aterriza, recarga al 100% otra vez y vuelve a tomar la ruta desde donde lo dejo. Aqui hay un ejemplo con el gasto de la bateria exagerado para que no sea muy largo:
+Para simular la bateria se sa una variable que comienza en 100, y baja en 2.5 puntos cada vez que llega a un destino, caundo ocurre eso vuelve a baja velocidad ( porque de otra manera era dificil acertar el aterrizaje en el barco y se caía al agua ), aterriza, recarga al 100% otra vez y vuelve a tomar la ruta desde donde lo dejo. Aqui hay un ejemplo con el gasto de la bateria exagerado para que no sea muy largo:
 
 [Screencast from 2026-10-13 21-34-55.webm](https://github.com/user-attachments/assets/947e57cb-977a-4952-a0bb-896410c6a23e)
+
+## Ejemplo de ejecucion
+
+[screencast_recortado.webm](https://github.com/user-attachments/assets/0a0875ac-a404-43e8-bdfd-81d59ef2d5bb)
+
+## Futuras posibles implementacions
+Algunas mejoras que se podrian aplicar a esta practica son por ejemplo, la traza de espirales circulares en lugar de cuadradas ya que serian mas rapidas y fluidas. Lo que mejoraria mucho la eficiencia de rescate. Por otro lado tambien el realismo de la bateria, actualmente gasta lo mismo patrullando que moviendose del barco a la zona de rescate, ademas gasta lo mismo ir a un punto lejano que uno muy cercano. Aunque tiene facil arreglo, decidi dejarlo asi porque de esta manera era mas sencillo hacer testear los diferentes requerimientos por separado. Por último, aunque no procede para esta practica, en un escenario mas realista, el detector de caras de OpenCV no seria suficiente, y seria preferible usar un modelo entrenado para detectar caras especificamente.
 
 
