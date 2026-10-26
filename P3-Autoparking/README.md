@@ -26,3 +26,8 @@ A continuación algunos ejemplos de ejecución:
 
 [Aparcamiento_2ref.webm](https://github.com/user-attachments/assets/ec3eb247-af88-494f-9f09-5c604e25a1aa)
 
+
+Notesé que se usan velocidades muy bajas, esto s ehace aposta para intentar hacer movimientos mas precisos y evitar colisiones con la acera u otros coches.
+
+## Futuras posibles implementaciones
+Algunas caracteristicas que se podian implementar como por ejemplo; una maniobra hibrida entre los laseres y el lidar, usando el lidar par detectar el hueco teniendo en cuenta posibles obstaculos (como escombros con poca altura que el laser pasaria por alto) y el laser para ajustar la maniobra dependiendo del tipo de hueco que se encuentre. Por otro lado, optimizar la maniobra para que sea mas rápida y o obstaculice el carril ni invada el carril contrario.
