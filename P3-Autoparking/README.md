@@ -19,3 +19,7 @@ La maniobra para aparcar es relativametne sencilla ya que es muy mecanica, lo ma
 En versiones anteriores he intentado hacer la maniobra usando la libreria **time**, pero no ha dado muy buenos resultados, porque hacer un pequeño cambio en una fase implicaba cambiar todas las demas a base de prueba y error para que vuelva a cuadrar todo. Ademas, daba la sensación de que en ejecuciones seguidas sin cambios no daba resultados iguales en algunos casos. Sobre todo, cuando intentaba grabar los resultados de la ejecución.
 
 A continuación algunos ejemplos de ejecución:
+[Aparcamiento_ref_detras.webm](https://github.com/user-attachments/assets/5000d53f-8a44-4ddf-8620-05d5332070d3)
+[Aparcamiento_ref_delante.webm](https://github.com/user-attachments/assets/e09ce49a-5e7c-4510-8b75-363f094184ea)
+[Aparcamiento_2ref.webm](https://github.com/user-attachments/assets/ec3eb247-af88-494f-9f09-5c604e25a1aa)
+
