@@ -8,6 +8,11 @@ En mi caso he decidido abordar directamente el mundo del LIDAR en lugar de proba
 
 Respecto al filtro, el hueco se da por válido si la longitud de la nube de puntos filtrada por distancias es menor que cierto umbral, pero hay que tener en cuenta que hay fluctuaciones importantes a tener en cuenta, la nube de puntos aumenta de tamaño cuando hay un objeto en la acera (como una farola en nuestro caso) o  una pared al lado del hueco y  baja bastante en al pasar cerca de los huecos entre los coches (aunque sean pequeños). Por lo que hay que tener cuidado al establecer el umbral.
 
+### Encontrando hueco con las farolas
+
+[Screencast from 2026-10-29 18-56-51.webm](https://github.com/user-attachments/assets/77ad8cb5-27b7-4323-9af1-e9416d692bcd)
+
+
 ## Maniobra de aparcamiento
 La maniobra para aparcar es relativametne sencilla ya que es muy mecanica, lo mas tedioso ha sido encontrar las velocidades y distancias adecuadas para cuadrarlo bien en todos los escenarios. Uno de los principales problemas que he encontrado ha sido el limitado rango de giro del coche, lo que me ha obligado a diseñar una maniobra con movimientos muy amplios, que en un escenario real podria obstruir el tráfico. La maniobra es la siguiente:
 
