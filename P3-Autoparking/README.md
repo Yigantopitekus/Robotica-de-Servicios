@@ -11,13 +11,12 @@ Respecto al filtro, el hueco se da por válido si la longitud de la nube de punt
 ### Encontrando hueco con las farolas
 En este ejemplo el aparcamiento esta desactivado, en la terminal se va indicando la cantidad de puntos que detecta en la franja, y si lo considera hueco o no.
 
-[Screencast from 2026-10-29 18-56-51.webm](https://github.com/user-attachments/assets/77ad8cb5-27b7-4323-9af1-e9416d692bcd)
+[Deteccion_con_farolas](https://github.com/user-attachments/assets/77ad8cb5-27b7-4323-9af1-e9416d692bcd)
 
 ### Encontrando hueco con "pared" u obstáculo en la acera
 En este ejemplo el aparcamiento esta desactivado, en la terminal se va indicando la cantidad de puntos que detecta en la franja, y si lo considera hueco o no.
 
-[Screencast from 2026-10-29 19-37-21.webm](https://github.com/user-attachments/assets/65d2f375-2635-4268-9edb-bf77b261be8f)
-
+[Detección_con_pared](https://github.com/user-attachments/assets/898cc809-d6be-4b56-8baf-3aeb35d41e31)
 
 El truco esta en  ajustar la dsitancia del filtro del LIDAR para que solo cuente los puntos hasta un maximo de distancia , evitando asi analizar los puntos detectados mas alla de la calzada
 ## Maniobra de aparcamiento
