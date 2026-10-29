@@ -13,7 +13,13 @@ En este ejemplo el aparcamiento esta desactivado, en la terminal se va indicando
 
 [Screencast from 2026-10-29 18-56-51.webm](https://github.com/user-attachments/assets/77ad8cb5-27b7-4323-9af1-e9416d692bcd)
 
+### Encontrando hueco con "pared" u obstáculo en la acera
+En este ejemplo el aparcamiento esta desactivado, en la terminal se va indicando la cantidad de puntos que detecta en la franja, y si lo considera hueco o no.
 
+[Screencast from 2026-10-29 19-37-21.webm](https://github.com/user-attachments/assets/65d2f375-2635-4268-9edb-bf77b261be8f)
+
+
+El truco esta en  ajustar la dsitancia del filtro del LIDAR para que solo cuente los puntos hasta un maximo de distancia , evitando asi analizar los puntos detectados mas alla de la calzada
 ## Maniobra de aparcamiento
 La maniobra para aparcar es relativametne sencilla ya que es muy mecanica, lo mas tedioso ha sido encontrar las velocidades y distancias adecuadas para cuadrarlo bien en todos los escenarios. Uno de los principales problemas que he encontrado ha sido el limitado rango de giro del coche, lo que me ha obligado a diseñar una maniobra con movimientos muy amplios, que en un escenario real podria obstruir el tráfico. La maniobra es la siguiente:
 
