@@ -30,6 +30,24 @@ En esta parte es necesario establecer el punto de inicio y el punto final, que e
 Por último se tiene que definir el planificador, al principio, siguiendo el ejemplo del enunciado se usaba RRTconnect, que devuelve la primera ruta que encuentra, no necesariamente la mas óptima, lo que hacia que el robot hiciese trayectorias inncecesarias y en la mayoria de los casos problematicos. Por eso he decidido usar RRTstar  que encuentra caminos óptimos y aún bastante rápido.
 
 ## Seguimiento de la ruta
-Para cada estantería se definen 2 rutas, una de ida y otra de vuelta. En la de ida, se calculan los estados teniendo en cuenta las dimensiones del robot, pero en la de vuelta, se tienen en cuenta las dimensiones de la estanteria que carga el robot. Se generan las rutas en demanda, es decir, justo antes de ejecutarla. En un principio intenté hacerlas todas del tirón al comienzo, para que el robot no obstaculizase el almacém, sin embargo es díficil hacerlo de esta manera porque el mapa cambia cuando mueves las estanterias. En un caso real esto puede ser un problema porque el robot se queda pensando en medio del almacén, pero no tan grave porque en todo caso se quedaria pensando al comienzo y debajo de las estanterias donde no deberia molestar a nadie. Las rutas no se ejecutan hasta el final, ya que generalmente esto implica entrar debajo de las estanterias que es la parte mas complicada del trayecto,por eso solo se ejecuta emplea el plan hastael penúltimo punto, como un punto de aproximacion. Una vez en ese punto, se alinea hacie el destino y avanza mecanicamente. Esto es lo que mejores resltados ha dado, con el otro panteamiento muchas vecesrozaba y movia las estanterias por las patas.
+Para cada estantería se definen 2 rutas, una de ida y otra de vuelta. En la de ida, se calculan los estados teniendo en cuenta las dimensiones del robot, pero en la de vuelta, se tienen en cuenta las dimensiones de la estanteria que carga el robot. Se generan las rutas en demanda, es decir, justo antes de ejecutarla. En un principio intenté hacerlas todas del tirón al comienzo, para que el robot no obstaculizase el almacém, sin embargo es díficil hacerlo de esta manera porque el mapa cambia cuando mueves las estanterias. En un caso real esto puede ser un problema porque el robot se queda pensando en medio del almacén, pero no tan grave porque en todo caso se quedaria pensando al comienzo y debajo de las estanterias donde no deberia molestar a nadie. Las rutas no se ejecutan hasta el final, ya que generalmente esto implica entrar debajo de las estanterias que es la parte mas complicada del trayecto,por eso solo se ejecuta emplea el plan hasta el un punto de aproximación. Una vez en ese punto, se alinea hacia el destino y avanza mecanicamente. Esto es lo que mejores resltados ha dado, con el otro panteamiento muchas vecesrozaba y movia las estanterias por las patas.
+
+Para el movimiento de la ruta, se usa una funcion que dirige el movimiento hasta el waypoint que toque, primero se orienta, y despues avanza en linea recta.
+
+El control general del programa lo rige una máquina de estados:
+ 1. PLANIFICAR_IDA
+ 2. MOVER_IDA
+ 3. GIRAR_IDA
+ 4. ENTRAR_OBJETO
+ 5. COGER_OBJETO
+ 6. SALIR_CARGADO
+ 7. PLANIFICAR_VUELTA
+ 8. MOVER_VUELTA
+ 9. GIRAR_VUELTA
+ 10. ENTRAR_CARGADO
+ 11. SOLTAR_OBJETO
+ 12. SALIR_VACIO
+
+Los estados ENTRAR son como se ha indicado antes, desde el punto de aproximacion, ya orientado, avazar recto hasta la parte inferior de la estanteria. Los estados SALIR son para, antes de cambiar la hitbox, volver a un punto anterior para que al cambiar la hitbox y actalizar el mapa no se quede el robot atrapado.
 
 [Screencast from 2026-11-05 16-27-23.webm](https://github.com/user-attachments/assets/27e81c87-8e6a-4b24-b23d-efb33b11ba3d)
