@@ -3,6 +3,8 @@ En esta practica se pide diseñar un robot para transportar estanterias en un al
 
 ## Registro del mapa
 Para poder relacionar el mapa con las coordenadas de gazebo necesitamos hacer un par de funciones que nos permita pasar de coordenadas a pixeles y viceversa. PAra ello se puede seguir el procedimiento de la P1, pero si nos fijamos, el punto 0,0 es exactamente el medio de la imagen, por lo que sabiendo las dimensiones del del almacen y los pixeles de la imagen es facil crear una relacion entre ambos. Y esto es lo que hago, tengo 2 funciones que se dedican a pasar de pixel a coordeanda y viceversa.
+## Wharehose 1 - Robot Holonómico - Representado como un punto
+En este escenario se engrosa todo el mapa asumiendo una forma circular del robot, y se comprueba un estado valido si la coordenada del robot se encuentra en un obstaculo, el engrosamiento varía en funcion de si el robot carga o no una estantería.
 ## Wharehouse 1 - Robot Holonómico - Comprobacion de la geometria  del robot
 En este escenario se comprueba durante la planificacion si el robot cabe en determinados espacios dada una "hitbox" indicada. Para permitir giros y mejor maniobrabilidad para evitar posibles fallos, se le asigna un area circular alrededor del robot, cuyo radio depende de si carga una estanteria o no.
 ### Gestión del mapa
