@@ -1,4 +1,3 @@
-[Screencast from 2026-11-06 12-20-37.webm](https://github.com/user-attachments/assets/ab1b2381-a7fe-437b-8ba6-9c1fa952b804)
 # Planificacion con OMPL
 En esta practica se pide diseñar un robot para transportar estanterias en un almacen, se dan 2 robots distintos, uno holonomico y otro que funciona con Ackermann. El robot debe planificar la ruta para situarse debajo de la estanteria con OMPL y despues depositarla en las zonas designadas usando tambien OMPL para la ruta de vuelta
 
@@ -47,5 +46,9 @@ El control general del programa lo rige una máquina de estados:
  12. SALIR_VACIO
 
 Los estados ENTRAR son como se ha indicado antes, desde el punto de aproximacion, ya orientado, avazar recto hasta la parte inferior de la estanteria. Los estados SALIR son para, antes de cambiar la hitbox, volver a un punto anterior para que al cambiar la hitbox y actalizar el mapa no se quede el robot atrapado.
+
+
+[Screencast from 2026-11-06 12-20-37.webm](https://github.com/user-attachments/assets/ab1b2381-a7fe-437b-8ba6-9c1fa952b804)
+
 
 [Screencast from 2026-11-05 16-27-23.webm](https://github.com/user-attachments/assets/27e81c87-8e6a-4b24-b23d-efb33b11ba3d)
