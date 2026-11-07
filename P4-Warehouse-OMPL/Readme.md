@@ -46,12 +46,10 @@ El control general del programa lo rige una máquina de estados:
  12. SALIR_VACIO
 
 Los estados ENTRAR son como se ha indicado antes, desde el punto de aproximacion, ya orientado, avazar recto hasta la parte inferior de la estanteria. Los estados SALIR son para, antes de cambiar la hitbox, volver a un punto anterior para que al cambiar la hitbox y actalizar el mapa no se quede el robot atrapado.
-
-
-[Screencast from 2026-11-06 12-20-37.webm](https://github.com/user-attachments/assets/ab1b2381-a7fe-437b-8ba6-9c1fa952b804)
-
+## Ejemplo
 
 [Screencast from 2026-11-05 16-27-23.webm](https://github.com/user-attachments/assets/27e81c87-8e6a-4b24-b23d-efb33b11ba3d)
+
 ## Wharehose 1 - Robot Holonómico - Representado como un punto
 En este escenario se engrosa todo el mapa asumiendo una forma circular del robot, y se comprueba un estado valido si la coordenada del robot se encuentra en un obstaculo, el engrosamiento varía en funcion de si el robot carga o no una estantería. Este escenario es una version mas primeriza de la otra para este robot.
 
