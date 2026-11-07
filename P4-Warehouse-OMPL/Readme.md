@@ -4,9 +4,19 @@ En esta practica se pide diseñar un robot para transportar estanterias en un al
 ## Registro del mapa
 Para poder relacionar el mapa con las coordenadas de gazebo necesitamos hacer un par de funciones que nos permita pasar de coordenadas a pixeles y viceversa. PAra ello se puede seguir el procedimiento de la P1, pero si nos fijamos, el punto 0,0 es exactamente el medio de la imagen, por lo que sabiendo las dimensiones del del almacen y los pixeles de la imagen es facil crear una relacion entre ambos. Y esto es lo que hago, tengo 2 funciones que se dedican a pasar de pixel a coordeanda y viceversa.
 ## Wharehose 1 - Robot Holonómico - Representado como un punto
-En este escenario se engrosa todo el mapa asumiendo una forma circular del robot, y se comprueba un estado valido si la coordenada del robot se encuentra en un obstaculo, el engrosamiento varía en funcion de si el robot carga o no una estantería.
+En este escenario se engrosa todo el mapa asumiendo una forma circular del robot, y se comprueba un estado valido si la coordenada del robot se encuentra en un obstaculo, el engrosamiento varía en funcion de si el robot carga o no una estantería. Este escenario es una version mas primeriza de la otra para este robot.
+
+### Gestión del mapa
+En este otro caso, la diferencia es que el mpa se engorda en funcion de la htbox actual del robot, si esta cargando una estanteria se engordan todos los obstaculos en funcion de las dimensiones de la estantería y sino, en funcion de las dimensiones del robot. En ambas se asume que la geometria del robot es redonda. Esto permite representar el robot com un punto 2D, ya que las medids de precaucion se han tomado de manera relativa a los obstáculos.
+
+### Planificación y seguimiento de ruta
+EL seguimien to de la ruta es esencialmente el mismo procedimiento, en cuanto a la planificacion lo único que cambia es la validación de estados. Ya que al haber engrosado todos los obstaculos, no hace falta ocomprobar los alrededores del robot, sino únicamente su posicion actual.
+## Ejemplo
+
+[Screencast from 2026-11-06 12-20-37.webm](https://github.com/user-attachments/assets/316604b9-1cd4-4542-934e-1410e4dbafc5)
+
 ## Wharehouse 1 - Robot Holonómico - Comprobacion de la geometria  del robot
-En este escenario se comprueba durante la planificacion si el robot cabe en determinados espacios dada una "hitbox" indicada. Para permitir giros y mejor maniobrabilidad para evitar posibles fallos, se le asigna un area circular alrededor del robot, cuyo radio depende de si carga una estanteria o no.
+En este escenario se comprueba durante la planificacion si el robot cabe en determinados espacios dada una "hitbox" indicada. Para permitir giros y mejor maniobrabilidad para evitar posibles fallos, se le asigna un area circular alrededor del robot, cuyo radio depende de si carga una estanteria o no. 
 ### Gestión del mapa
  Antes de empezar a montar el plan con OMPL es importante ver como se va a manejar el mapa tanto para la planificacion como la visualizacion,hay que tener en cuenta que el mapa es dinamico, tambien he definido 2 funciones que se usan en las acciones de Soltar Objeto y Coger Objeto, que pintan en el mapa directamente, para borrar las patas del mapa al coger la estanteria pintando por encima de blanco y volver a pintarlas al soltar la estanteria, teniendo en cuenta la orientacion con la que se deja la estanteria. Esto es muy necesario para bloquear posibles rutas que interfeiran con los cambios del mapa y permitir otras que se desbloquean al mover las estanterias. Por lo demás en este caso no se manipula mucho el mapa.
 
