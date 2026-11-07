@@ -62,4 +62,93 @@ EL seguimien to de la ruta es esencialmente el mismo procedimiento, en cuanto a 
 
 [Screencast from 2026-11-06 12-20-37.webm](https://github.com/user-attachments/assets/316604b9-1cd4-4542-934e-1410e4dbafc5)
 
+## Warehose 1 - Robot Ackermann - Comprobando la geometría del robot
+Este caso se asemeja al Robot holonomico - comprobando su geometria , las diferencias residen en la geometria dle robot y en su conduccion. Este robot es rectangular, y usa una geometria ackerman, es decir que no puede girar sobre si mismo como el robot anterior.
 
+### Gestión del mapa
+El mapa se maneja de igual manera que el caso uno, la principal diferencia es la representacion d ela "hitbox" del robot, que en este caso tiene que ser rectangular y no circular. EN el otro caso se hacia circular para permitir giro sobre si mismo, ahora, con la geometria ackerman solo se representa un area rectangular, mas grande o mas pequeña si el robot esta cargado o no.
+
+### Planificacion y seguimiento de la ruta
+En este ambito hay bastantes cambios mas considerables, en el espacio de estados, validación de estados, y seguimiento de la ruta.
+
+#### Cambios en el espacio de estados
+En el caso anterior el espacio de estados era `RealVectorStateSpace(2)`, que solo contiene las coordenadas x e y. El yaw no formaba parte del estado, y por eso se imponía aparte alineándose con la estantería antes de entrar.
+
+Un robot Ackermann no puede girar sobre sí mismo y su orientación condiciona hacia dónde puede moverse. Por eso el yaw tiene que formar parte del estado, y además la ruta debe respetar el radio de giro mínimo. Para ello uso los espacios de estados de OMPL para vehículos con curvatura limitada:
+
+- **`DubinsStateSpace`**: conecta dos poses (x, y, yaw) con arcos de radio mínimo y rectas, solo hacia delante.
+- **`ReedsSheppStateSpace`**: igual, pero permite también marcha atrás, lo que da más flexibilidad en espacios estrechos.
+
+Ambos reciben el radio de giro mínimo. Lo medí en simulación con la dirección saturada y salió 0.86 m. El planificador usa un radio más holgado (`R_PLAN = 1.4 * R_MIN_REAL`) para que el controlador no tenga que ir siempre al límite de su capacidad de giro.
+
+Se planifica con los dos espacios y se elige la ruta de menor coste. El coste es la longitud de la ruta, con un 30 % de penalización en los tramos en marcha atrás y una penalización fija por cada cambio de sentido. Así el robot solo usa marcha atrás cuando compensa. El planificador sigue siendo RRT*, con un `goal bias` de 0.15 para que explore con más frecuencia hacia la meta.
+
+La meta es una pose completa: posición y orientación de la estantería. La ruta termina debajo de ella, ya orientada correctamente.
+
+#### Validación de estados
+El estado se valida con un rectángulo orientado según el yaw del estado, no con un círculo. La huella depende de si el robot lleva carga:
+
+- **Vacío**: el rectángulo del robot con un 150 % de su área.
+- **Cargado**: las dimensiones de la estantería (2.2 x 1.0 m).
+
+Para comprobarlo se rasteriza el rectángulo sobre el mapa de espacio libre y se mira si toca algún píxel ocupado. Como el mapa solo contiene las patas de las estanterías, un rectángulo podría colarse entre ellas. Por eso, al construir el mapa de espacio libre, cada estantería pendiente y cada estantería ya entregada se marca como un bloque sólido. Este mapa se regenera cada vez que se coge o se suelta una estantería.
+
+La estantería que se va a recoger es la excepción. Si fuera un bloque sólido, el planificador no podría llevar la ruta hasta su centro. Para ella solo se marcan como sólidas dos paredes laterales y un tope trasero, y se deja libre un pasillo central de ancho `ancho del robot + CANAL_MARGEN`. Así la ruta tiene que entrar por el eje de la estantería, y no en diagonal desde un lateral.
+
+Igual que en el caso holonómico, si no se encuentra solución se reduce poco a poco el factor de la huella (hasta un mínimo de 0.95) y se vuelve a intentar.
+
+#### Seguimiento de la ruta
+La ruta de OMPL se interpola cada 5 cm y se divide en **segmentos según el sentido de la marcha**: cada vez que la ruta pasa de avance a marcha atrás, o al revés, empieza un segmento nuevo. Los puntos donde cambia el sentido son las cúspides, y el robot se detiene en ellas antes de invertir la marcha.
+
+Cada segmento se sigue con un controlador **pure pursuit**:
+
+1. Se busca el punto de la ruta más cercano al robot, mirando solo unos 1.5 m hacia delante, para no engancharse a puntos de otra parte de la ruta.
+2. A partir de él se avanza una distancia de lookahead y se obtiene el punto objetivo.
+3. Se calcula la curvatura del arco que lleva al robot a ese punto: `kappa = 2 * y_local / L²`. Se limita a la curvatura máxima que admite el robot.
+4. La velocidad angular es `W = V * kappa`. Como `V` cambia de signo en marcha atrás, la misma fórmula sirve para ambos sentidos.
+
+Para evitar que el robot coletee al corregir (algo muy habitual en vehículos Ackermann) se añadieron varias medidas:
+
+- **Lookahead mínimo.** Un lookahead demasiado corto hace que cualquier error lateral pequeño pida mucha curvatura.
+- **Límite de variación de la curvatura.** La dirección de un Ackermann no cambia de golpe, así que no se le pide que lo haga.
+- **Prolongación por la tangente al final de cada segmento.** Cuando el lookahead sobrepasa el final del segmento, el objetivo se extrapola en la dirección de la ruta. Sin esto el lookahead tiende a cero en las cúspides y la curvatura se dispara.
+- **Velocidad reducida en las curvas** y mucho menor cuando el robot va cargado.
+
+Si el robot se desvía más de 0.6 m de la ruta, o pasa 8 s sin avanzar por ella, se da por perdido y se replanifica desde la pose actual.
+
+Al terminar la ruta se comprueba que la pose final esté alineada con la estantería, tanto en yaw como en desviación lateral. Si no lo está se replanifica, con una tolerancia algo mayor en cada reintento. Tras dos reintentos se acepta la pose tal como esté, para evitar replanificar indefinidamente.
+
+#### Máquina de estados
+Al no haber punto de aproximación, desaparecen los estados `ENTRAR` y la máquina de estados queda más corta:
+
+1. PLANIFICAR_IDA
+2. MOVER_IDA
+3. COGER_OBJETO
+4. SALIR_CARGADO
+5. PLANIFICAR_VUELTA
+6. MOVER_VUELTA
+7. SOLTAR_OBJETO
+8. SALIR_VACIO
+
+Los estados `SALIR` siguen existiendo y siguen siendo una marcha atrás en línea recta, por el eje de la estantería. Tras coger o soltar la estantería la huella cambia y el mapa se actualiza. Si se planificara desde dentro del pasillo, el robot podría quedar atrapado, o tener que girar con la estantería encima en un espacio muy ajustado.
+
+## Ejemplo
+
+[Aquí va el vídeo del robot Ackermann]
+
+## Parámetros ajustables
+Los parámetros que más influyen en el comportamiento del robot Ackermann:
+
+| Parámetro | Efecto |
+|---|---|
+| `R_PLAN` | Radio de giro que usa el planificador. Más grande da curvas más suaves, pero más difícil encontrar ruta en espacios estrechos. |
+| `FACTOR_AREA_VACIO` | Margen de la huella del robot vacío. |
+| `CANAL_MARGEN` | Holgura lateral del pasillo bajo la estantería. Más pequeño obliga a entrar más recto, pero hace más difícil encontrar ruta. |
+| `LD_MIN` | Lookahead mínimo. Más alto reduce el coleteo, pero corta más las curvas. |
+| `MAX_DK` | Límite de variación de la curvatura. Más bajo da una dirección más suave, pero con más retardo. |
+| `TOL_ALINEACION_YAW` / `TOL_ALINEACION_LAT` | Tolerancia de alineación al final de la ruta. |
+
+## Limitaciones
+- La huella de colisión es un rectángulo, no el contorno real del robot ni de la estantería. Si roza, hay que aumentar el margen.
+- La simulación no es perfecta: el seguidor de ruta tiene error, y por eso se deja margen en la huella y en el pasillo.
+- Replanificar puede tardar varios segundos. Si no se encuentra solución, el robot se queda parado mientras reduce el margen e inténtalo de nuevo.
