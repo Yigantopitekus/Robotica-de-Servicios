@@ -72,30 +72,18 @@ El mapa se maneja de igual manera que el caso uno, la principal diferencia es la
 En este ambito hay bastantes cambios mas considerables, en el espacio de estados, validación de estados, y seguimiento de la ruta.
 
 #### Cambios en el espacio de estados
-En el caso anterior el espacio de estados era `RealVectorStateSpace(2)`, que solo contiene las coordenadas x e y. El yaw no formaba parte del estado, y por eso se imponía aparte alineándose con la estantería antes de entrar.
+En el caso anterior el espacio de estados era `RealVectorStateSpace(2)`, que solo contiene las coordenadas x e y. Yaw no se tenía en cuenta porque al usar puntos de aproximacion, esto se abordaba fuera de la planificación.
 
-Un robot Ackermann no puede girar sobre sí mismo y su orientación condiciona hacia dónde puede moverse. Por eso el yaw tiene que formar parte del estado, y además la ruta debe respetar el radio de giro mínimo. Para ello uso los espacios de estados de OMPL para vehículos con curvatura limitada:
+Un robot Ackermann no puede girar sobre sí mismo y su orientación afecta hacia dónde puede moverse. Por eso el yaw tiene que formar parte del estado, y además hay que considerar que el robot tiene una capacidad de giro límitada. Para ello he usado los espacios de estados de OMPL para vehículos con curvatura limitada:
 
-- **`DubinsStateSpace`**: conecta dos poses (x, y, yaw) con arcos de radio mínimo y rectas, solo hacia delante.
-- **`ReedsSheppStateSpace`**: igual, pero permite también marcha atrás, lo que da más flexibilidad en espacios estrechos.
-
-Ambos reciben el radio de giro mínimo. Lo medí en simulación con la dirección saturada y salió 0.86 m. El planificador usa un radio más holgado (`R_PLAN = 1.4 * R_MIN_REAL`) para que el controlador no tenga que ir siempre al límite de su capacidad de giro.
-
-Se planifica con los dos espacios y se elige la ruta de menor coste. El coste es la longitud de la ruta, con un 30 % de penalización en los tramos en marcha atrás y una penalización fija por cada cambio de sentido. Así el robot solo usa marcha atrás cuando compensa. El planificador sigue siendo RRT*, con un `goal bias` de 0.15 para que explore con más frecuencia hacia la meta.
-
-La meta es una pose completa: posición y orientación de la estantería. La ruta termina debajo de ella, ya orientada correctamente.
+- **`DubinsStateSpace`**: conecta dos posiciones (x, y, yaw) con lineas que pueden ser curvas (respetando el radio minio de giro,lo obtuve con un script aparte) o rectas, solo hacia delante, es decir sin girar sobre sí mismo.
+- **`ReedsSheppStateSpace`**: igual, pero puede usar marcha atrás que es muy necesario para algunas posiciones.
+- 
+Se intenta planificar con **DubinsStateSpace**, pero si da error o la ruta es muy costosa, lo intenta con **`ReedsSheppStateSpace`**.Ambos siguen usando RRTstar, pero se le añade la configuracion del bias para que en vez de explorar aleatoriamente exploren mas hacia la meta.
 
 #### Validación de estados
-El estado se valida con un rectángulo orientado según el yaw del estado, no con un círculo. La huella depende de si el robot lleva carga:
+El estado se valida con un rectángulo orientado según el yaw actual del estado, en lugar de un círculo. El tamaño depende de si el robot esta cargando la estanteria o va vacío. AL igual que el caso del robot holonómico, se comprueban los pixeles del interior del rectangulo para ver si colisiona. Y el mapa sigue siendo dinámico, y si no se encuentra ninguna solución se va reduciendo el área poco a poco.
 
-- **Vacío**: el rectángulo del robot con un 150 % de su área.
-- **Cargado**: las dimensiones de la estantería (2.2 x 1.0 m).
-
-Para comprobarlo se rasteriza el rectángulo sobre el mapa de espacio libre y se mira si toca algún píxel ocupado. Como el mapa solo contiene las patas de las estanterías, un rectángulo podría colarse entre ellas. Por eso, al construir el mapa de espacio libre, cada estantería pendiente y cada estantería ya entregada se marca como un bloque sólido. Este mapa se regenera cada vez que se coge o se suelta una estantería.
-
-La estantería que se va a recoger es la excepción. Si fuera un bloque sólido, el planificador no podría llevar la ruta hasta su centro. Para ella solo se marcan como sólidas dos paredes laterales y un tope trasero, y se deja libre un pasillo central de ancho `ancho del robot + CANAL_MARGEN`. Así la ruta tiene que entrar por el eje de la estantería, y no en diagonal desde un lateral.
-
-Igual que en el caso holonómico, si no se encuentra solución se reduce poco a poco el factor de la huella (hasta un mínimo de 0.95) y se vuelve a intentar.
 
 #### Seguimiento de la ruta
 La ruta de OMPL se interpola cada 5 cm y se divide en **segmentos según el sentido de la marcha**: cada vez que la ruta pasa de avance a marcha atrás, o al revés, empieza un segmento nuevo. Los puntos donde cambia el sentido son las cúspides, y el robot se detiene en ellas antes de invertir la marcha.
