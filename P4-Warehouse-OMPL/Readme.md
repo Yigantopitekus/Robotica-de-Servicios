@@ -78,7 +78,7 @@ Un robot Ackermann no puede girar sobre sí mismo y su orientación afecta hacia
 
 - **`DubinsStateSpace`**: conecta dos posiciones (x, y, yaw) con lineas que pueden ser curvas (respetando el radio minio de giro,lo obtuve con un script aparte) o rectas, solo hacia delante, es decir sin girar sobre sí mismo.
 - **`ReedsSheppStateSpace`**: igual, pero puede usar marcha atrás que es muy necesario para algunas posiciones.
-- 
+  
 Se intenta planificar con **DubinsStateSpace**, pero si da error o la ruta es muy costosa, lo intenta con **`ReedsSheppStateSpace`**.Ambos siguen usando RRTstar, pero se le añade la configuracion del bias para que en vez de explorar aleatoriamente exploren mas hacia la meta.
 
 #### Validación de estados
@@ -86,7 +86,7 @@ El estado se valida con un rectángulo orientado según el yaw actual del estado
 
 
 #### Seguimiento de la ruta
-La ruta de OMPL se interpola cada 5 cm y se divide en **segmentos según el sentido de la marcha**: cada vez que la ruta pasa de avance a marcha atrás, o al revés, empieza un segmento nuevo. Los puntos donde cambia el sentido son las cúspides, y el robot se detiene en ellas antes de invertir la marcha.
+A la hora de generar la ruta, se usa la opcion _interpolate_ para que la ruta sean muchos waypoints muy cercanos, para poder hacer el seguimiento de la ruta mas preciso y controlado. Y el movimiento se gestiona de punto A a punto B, donde para pasar por todos los puntos intermedios se va en la misma dirección (hacia delante o atras)
 
 Cada segmento se sigue con un controlador **pure pursuit**:
 
