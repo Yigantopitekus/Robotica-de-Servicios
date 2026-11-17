@@ -5,3 +5,5 @@ PAra poder relacionar las coordenadas del robot con los pixeles del mapa necesit
 ## Primer conjunto de particulas aleatorias
 Para comenzar con el algoritmo, necesitamos generar un conjunto de particulas generadas al azar alrededor del mapa. Para ello usamos una funcion especifica para esto que usa _np.random.uniform_ para generar los pares de pixeles, que despues se pasan a coordenadas usando las funciones del registro.
 Los pares se generan como pixeles, ya que conocemos las dimensiones del mapa (1012x1012), y facilita comprobar si la particula cae en un obstaculo. AL añadirlo a la lista, se pasa a coordenadas de gazebo, ya que lo requiere _WUI.showParticles()_. COmo la matriz de conversion no es perfecta, algunas de las particulas generadas aparecen dentro de un obstáculo, cerca del borde, al pasardo a coordenadas de gazebo.
+<img width="891" height="608" alt="image" src="https://github.com/user-attachments/assets/a9b9071c-d9fc-4c7b-ba6d-83090be4e8fb" />
+
