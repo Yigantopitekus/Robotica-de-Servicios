@@ -76,7 +76,7 @@ En el caso anterior el espacio de estados era `RealVectorStateSpace(2)`, que sol
 
 Un robot Ackermann no puede girar sobre sí mismo y su orientación afecta hacia dónde puede moverse. Por eso el yaw tiene que formar parte del estado, y además hay que considerar que el robot tiene una capacidad de giro límitada. Para ello he usado los espacios de estados de OMPL para vehículos con curvatura limitada:
 
-- **`DubinsStateSpace`**: conecta dos posiciones (x, y, yaw) con lineas que pueden ser curvas (respetando el radio minio de giro,lo obtuve con un script aparte) o rectas, solo hacia delante, es decir sin girar sobre sí mismo.
+- **`DubinsStateSpace`**: conecta dos posiciones (x, y, yaw) con lineas que pueden ser curvas (respetando el radio minimo de giro,lo obtuve con un script aparte) o rectas, solo hacia delante, es decir sin girar sobre sí mismo.
 - **`ReedsSheppStateSpace`**: igual, pero puede usar marcha atrás que es muy necesario para algunas posiciones.
   
 Se intenta planificar con **DubinsStateSpace**, pero si da error o la ruta es muy costosa, lo intenta con **`ReedsSheppStateSpace`**.Ambos siguen usando RRTstar, pero se le añade la configuracion del bias para que en vez de explorar aleatoriamente exploren mas hacia la meta.
@@ -88,7 +88,7 @@ El estado se valida con un rectángulo orientado según el yaw actual del estado
 #### Seguimiento de la ruta
 A la hora de generar la ruta, se usa la opcion _interpolate_ para que la ruta sean muchos waypoints muy cercanos, para poder hacer el seguimiento de la ruta mas preciso y controlado. Y el movimiento se gestiona por segmentos de trozos de la ruta donde se va hacia adelante o hacia atras.
 
-Para mover al robot a través de cada segmento, se usa un controlador de pure pursuit, donde a partir de un punto cercano a robot, se mira una distanca hacia adelante y se elige un punto, para estimar la posible trayectoria para llegar a dicho punto.
+Para mover al robot a través de cada segmento, se usa un controlador de pure pursuit, donde a partir de un punto cercano a robot, se mira una distanca hacia adelante y se elige un punto, para estimar la posible trayectoria para llegar a dicho punto. Cada punto que se trata de seguir contiene una posicion,**x**,**y** y **yaw**, y el controlador lo pasa a velocidades.
 
 Uno de los problemas que tenía con este controlador era que oscilaba mucho la trayectoria, sobre todo marcha atrás, y se salia de la ruta proupesta, esto se arreglaba cambiando los parametros del controlador. Aumentando el lookahead, reduciendo velocidades en  las curvas y evitando giros muy bruscos (con el robot ackerman era complicado)
 
